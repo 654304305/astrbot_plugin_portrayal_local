@@ -37,7 +37,7 @@ git clone https://github.com/654304305/astrbot_plugin_portrayal_local
 
 ## ⚙️ 配置
 
-在 AstrBot 面板 → 插件管理 → astrbot_plugin_portrayal → 操作 → 插件配置 中调整。
+在 AstrBot 面板 → 插件管理 → astrbot_plugin_portrayal_local → 操作 → 插件配置 中调整。
 
 ### LLM 配置
 
