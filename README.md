@@ -1,8 +1,8 @@
 <div align="center">
 
-# astrbot_plugin_portrayal
+# astrbot_plugin_portrayal_local
 
-_✨ 人物画像插件本地重构版 ✨_
+_✨ 人物画像插件 ✨_
 
 根据群友的聊天记录，调用 LLM 分析群友的性格画像——支持综合画像、正/负画像、红娘匹配、克隆人格，本地缓存聊天记录，无需反复爬取协议端。
 
@@ -28,8 +28,7 @@ _✨ 人物画像插件本地重构版 ✨_
 
 ## 📦 安装
 
-- 方式一：在 AstrBot 插件市场搜索 `astrbot_plugin_portrayal`，点击安装。
-- 方式二：克隆源码到插件目录后重启 AstrBot：
+  克隆源码到插件目录后重启 AstrBot：
 
 ```bash
 cd /AstrBot/data/plugins
@@ -67,6 +66,10 @@ git clone https://github.com/654304305/astrbot_plugin_portrayal_local
 | `entry_storage` | — | 提示词命令配置，可在 WebUI 中自定义增删 |
 
 ## ⌨️ 使用说明
+
+### 🛠️ LLM 工具（自然语言调用）
+
+除了下文的指令触发外，插件还会通过 `add_llm_tools` 注册一个名为 `generate_portrait` 的函数调用工具。注册后，Bot 的人格模型可以在**自然语言对话中自主识别画像意图**并调用该工具——用户无需记住任何指令格式，直接说「评价一下我」「@某人 是个什么样的人」「找对象」等日常表达即可触发画像生成，由 LLM 自动判定风格（画像/正画像/负画像/找对象）与目标用户。这是本插件区别于纯指令插件的核心特性。
 
 插件的命令分两类：
 
