@@ -2,7 +2,7 @@
 
 # astrbot_plugin_portrayal
 
-_✨ 人物画像插件 ✨_
+_✨ 人物画像插件本地重构版 ✨_
 
 根据群友的聊天记录，调用 LLM 分析群友的性格画像——支持综合画像、正/负画像、红娘匹配、克隆人格，本地缓存聊天记录，无需反复爬取协议端。
 
@@ -33,7 +33,7 @@ _✨ 人物画像插件 ✨_
 
 ```bash
 cd /AstrBot/data/plugins
-git clone https://github.com/Zhalslar/astrbot_plugin_portrayal
+git clone https://github.com/654304305/astrbot_plugin_portrayal_local
 ```
 
 ## ⚙️ 配置
