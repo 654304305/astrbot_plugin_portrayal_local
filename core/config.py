@@ -173,7 +173,7 @@ class PluginConfig(ConfigNode):
     inject_prompt: bool
     entry_storage: list[dict[str, Any]]
 
-    _plugin_name: str = "astrbot_plugin_portrayal"
+    _plugin_name: str = "astrbot_plugin_portrayal_local"
 
     def __init__(self, cfg: AstrBotConfig, context: Context):
         super().__init__(cfg)
