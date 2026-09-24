@@ -1,0 +1,156 @@
+{
+    "llm": {
+        "description": "LLM配置",
+        "type": "object",
+        "items": {
+            "provider_id": {
+                "description": "用于分析画像的LLM提供商",
+                "hint": "留空或者填写的提供商不存在时, 则使用当前正在使用的LLM提供商",
+                "type": "string",
+                "default": "",
+                "_special": "select_provider"
+            },
+            "retry_times": {
+                "description": "LLM调用失败重试次数",
+                "type": "int",
+                "hint": "LLM调用失败时, 重试的次数",
+                "slider": {
+                    "min": 1,
+                    "max": 5,
+                    "step": 1
+                },
+                "default": 2
+            }
+        }
+    },
+    "message": {
+        "description": "消息查询配置",
+        "type": "object",
+        "items": {
+            "record_bot_reply": {
+                "description": "是否记录机器人的消息",
+                "type": "bool",
+                "default": false
+            },
+            "record_bot_all": {
+                "description": "是否记录机器人的全部发言",
+                "type": "bool",
+                "hint": "开启后，除 LLM 生成的回复外，还会记录其他插件发送的消息（如主动回复、命令回执等）。关闭则仅记录 LLM 生成的回复。",
+                "default": false
+            },
+            "max_msg_count": {
+                "description": "单次画像分析的最大消息量(条)",
+                "type": "int",
+                "hint": "从本地缓存提取聊天记录时的默认条数上限。实际能取到的条数还受 max_user_cache_size 限制，最终取两者较小值。条数越多，画像越准确，但消耗更多时间和Token。",
+                "slider": { "min": 20, "max": 1000, "step": 10 },
+                "default": 100
+            },
+            "max_group_cache_size": {
+                "description": "每个群本地缓存的最大消息条数",
+                "type": "int",
+                "hint": "本地缓存中保留的最大聊天记录量",                
+                "slider": {
+                    "min": 2000,
+                    "max": 10000,
+                    "step": 50
+                },
+                "default": 4000
+            },
+            "max_user_cache_size": {
+                "description": "每个用户本地缓存的最大消息条数",
+                "type": "int",
+                "hint": "单群内，每个用户（含机器人自己）保留的最新消息条数。该上限优先于群总上限执行，即先按人裁、再按群裁",
+                "slider": {
+                    "min": 20,
+                    "max": 500,
+                    "step": 10
+                },
+                "default": 100
+            },
+            "group_trim_ratio": {
+                "description": "群裁剪触发缓冲比例(%)",
+                "type": "int",
+                "hint": "群内消息数达到 max_group_cache_size × (1 + 该值/100) 时才触发裁剪，裁剪后保留 max_group_cache_size 条。0 表示无缓冲。",
+                "slider": { "min": 5, "max": 100, "step": 5 },
+                "default": 10
+            },
+            "user_trim_ratio": {
+                "description": "单人裁剪触发缓冲比例(%)",
+                "type": "int",
+                "hint": "单个用户消息数达到 max_user_cache_size × (1 + 该值/100) 时才触发裁剪，裁剪后保留 max_user_cache_size 条。0 表示无缓冲。",
+                "slider": { "min": 5, "max": 100, "step": 5 },
+                "default": 20
+            },
+            "min_text_length": {
+                "description": "过滤短消息的字数阈值",
+                "type": "int",
+                "hint": "人类发送的、字数不超过该值且不含白名单关键词的消息，不会存入数据库。bot 消息不受此限制。",
+                "slider": {
+                    "min": 1,
+                    "max": 20,
+                    "step": 1
+                },
+                "default": 5
+            },
+            "whitelist_keywords": {
+                "description": "白名单关键词",
+                "type": "list",
+                "hint": "消息中包含任一关键词时，无视字数限制直接入库。",
+                "default": ["娅"]
+            },
+            "min_messages_required": {
+                "description": "画像分析的最低消息数",
+                "type": "int",
+                "hint": "本地缓存中目标用户的消息少于该数量时，不进行画像分析，改为由 LLM 生成一段友好的拒绝语。0 表示不检查。",
+                "slider": {
+                    "min": 0,
+                    "max": 200,
+                    "step": 5
+                },
+                "default": 10
+            },
+            "protected_user_ids": {
+                "description": "受保护用户名单",
+                "type": "list",
+                "hint": "填写QQ号。名单中的用户不允许被查询消息",
+                "default": []
+            }
+        }
+    },
+    "inject_prompt": {
+        "description": "给提示词注入画像",
+        "type": "bool",
+        "hint": "打开后，每轮对话中，若本地存有当前用户的画像，则自动将该用户画像注入到系统提示词中",
+        "default": false
+    },
+    "entry_storage": {
+        "description": "提示词配置",
+        "hint": "可自定义多套提示词，并定义对应触发命令。由此实现不同风格的画像分析",
+        "type": "template_list",
+        "templates": {
+            "default": {
+                "name": "提示词条目",
+                "items": {
+                    "command": {
+                        "description": "触发命令",
+                        "hint": "定义用什么命令触发本套提示词",
+                        "type": "string",
+                        "default": "请输入命令"
+                    },
+                    "need_admin": { 
+                        "description": "仅管理员可用",
+                        "hint": "是否需要bot管理员权限触发命令",
+                        "type": "bool",
+                        "default": false
+                    },
+                    "content": {
+                        "description": "提示词内容",
+                        "hint": "请填写提示词内容",
+                        "type": "text",
+                        "default": "请输入提示词"
+                    }
+                }
+            }
+        }
+    }
+}
